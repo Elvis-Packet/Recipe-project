@@ -1,0 +1,115 @@
+/* Dark Mode */
+
+    body {
+        font-family: Arial, sans-serif;
+        background color: black;
+        color: #333;
+    }
+    
+
+
+.container {
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+    background: hsla(167, 98%, 43%, 0.733);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    text-align: center;
+}
+
+h1 {
+    margin-bottom: 20px;
+    color: #007BFF;
+}
+
+.search-box {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+input {
+    width: 70%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+button {
+    padding: 10px 15px;
+    margin-left: 10px;
+    border: none;
+    background-color: #007BFF;
+    color: white;
+    font-size: 1rem;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+.results {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.recipe-card {
+    width: 200px;
+    margin: 10px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+}
+
+.recipe-card img {
+    width: 100%;
+    border-radius: 5px;
+}
+
+.recipe-card h3 {
+    font-size: 1.1rem;
+    margin: 10px 0;
+}
+
+.recipe-card a {
+    text-decoration: none;
+    color: #007BFF;
+    font-weight: bold;
+}
+
+.recipe-card a:hover {
+    text-decoration: underline;
+}
+body.dark-mode {
+    background-color: hsl(180, 16%, 13%);
+    color: hsl(0, 0%, 95%);
+}
+
+body.light-mode .container {
+    background-color: hsl(0, 0%, 100%);
+    color: hsl(0, 2%, 8%);
+}
+
+body.dark-mode button {
+    background-color: hsl(175, 68%, 7%);
+    color: rgb(12, 162, 207);
+}
+
+body.dark-mode button:hover {
+    background-color: hsla(193, 89%, 15%, 0.774);
+}
+
+
+/* Highlight Recipe Cards */
+.recipe-card.highlight {
+    border-color: #007BFF;
+    box-shadow: 0 4px 8px rgba(0, 123, 255, 0.3);
+    transform: scale(1.05);
+    transition: all 0.3s ease-in-out;
+}
