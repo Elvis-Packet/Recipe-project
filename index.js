@@ -1,72 +1,79 @@
-// DOM Elements: Select essential HTML elements for interaction
-const searchBtn = document.getElementById('searchBtn'); // Button to trigger recipe search
-const ingredientInput = document.getElementById('ingredientInput'); // Input field for ingredients
-const recipeResults = document.getElementById('recipeResults'); // Container to display recipe results
-const darkModeToggle = document.getElementById('darkModeToggle'); // Button to toggle dark mode
+// Select elements
+const searchBtn = document.getElementById('searchBtn');
+const ingredientInput = document.getElementById('ingredientInput');
+const recipeResults = document.getElementById('recipeResults');
+const darkModeToggle = document.getElementById('darkModeToggle');
+const backToSearchBtn = document.getElementById('backToSearch');
 
-// TheMealDB API endpoint: Base URL for fetching recipes based on ingredients
+// TheMealDB API endpoint
 const API_URL = "https://www.themealdb.com/api/json/v1/1/filter.php?i=";
 
-// Event Listener for Search Button Click
-// Listens for a click event on the "Search" button
+// Search button event listener
 searchBtn.addEventListener('click', () => {
-    const ingredient = ingredientInput.value.trim(); // Get user input and remove extra spaces
+    const ingredient = ingredientInput.value.trim();
     if (ingredient) {
-        fetchRecipes(ingredient); // Fetch recipes if input is provided
+        fetchRecipes(ingredient);
     } else {
-        alert("Please enter at least one ingredient!"); // Alert user if input is empty
+        alert("Please enter at least one ingredient!");
     }
 });
 
-// Function to Fetch Recipes
-// Fetches recipe data from TheMealDB API based on the ingredient provided
+// Fetch recipes from API
 function fetchRecipes(ingredient) {
-    recipeResults.innerHTML = "<p>Loading recipes...</p>"; // Display loading message
-    fetch(`${API_URL}${ingredient}`) // Make API call with the ingredient
-        .then(response => response.json()) // Parse the response as JSON
+    recipeResults.innerHTML = "<p>Loading recipes...</p>";
+    fetch(`${API_URL}${ingredient}`)
+        .then(response => response.json())
         .then(data => {
-            recipeResults.innerHTML = ""; // Clear loading message
+            recipeResults.innerHTML = "";
             if (data.meals) {
-                displayRecipes(data.meals); // Display recipes if found
+                displayRecipes(data.meals);
             } else {
-                recipeResults.innerHTML = "<p>No recipes found. Try different ingredients!</p>"; // Show message if no recipes are found
+                recipeResults.innerHTML = "<p>No recipes found. Try different ingredients!</p>";
             }
         })
         .catch(error => {
-            console.error("Error fetching data:", error); // Log errors in the console
-            recipeResults.innerHTML = "<p>Something went wrong. Please try again later.</p>"; // Show error message to the user
+            console.error("Error fetching data:", error);
+            recipeResults.innerHTML = "<p>Something went wrong. Please try again later.</p>";
         });
 }
 
-// Function to Display Recipes
-// Displays the fetched recipes in a card format
+// Display recipes in UI
 function displayRecipes(meals) {
-    meals.forEach(meal => {
-        const recipeCard = document.createElement('div'); // Create a container for each recipe
-        recipeCard.classList.add('recipe-card'); // Add a class for styling
+    recipeResults.innerHTML = ""; // Clear previous results
 
-        // Add recipe content (image, title, link) inside the card
+    meals.forEach(meal => {
+        const recipeCard = document.createElement('div');
+        recipeCard.classList.add('recipe-card');
+
         recipeCard.innerHTML = `
-            <img src="${meal.strMealThumb}" alt="${meal.strMeal}"> <!-- Recipe image -->
-            <h3>${meal.strMeal}</h3> <!-- Recipe title -->
-            <a href="https://www.themealdb.com/meal/${meal.idMeal}" target="_blank">View Recipe</a> <!-- Link to the full recipe -->
+            <img src="${meal.strMealThumb}" alt="${meal.strMeal}">
+            <h3>${meal.strMeal}</h3>
+            <a href="https://www.themealdb.com/meal/${meal.idMeal}" target="_blank">View Recipe</a>
         `;
 
-        // Add Hover Effect Listeners
-        // Highlight the recipe card when hovered
-        recipeCard.addEventListener('mouseover', () => {
-            recipeCard.classList.add('highlight'); // Add highlight effect
-        });
-        recipeCard.addEventListener('mouseout', () => {
-            recipeCard.classList.remove('highlight'); // Remove highlight effect
-        });
-
-        recipeResults.appendChild(recipeCard); // Add the recipe card to the results container
+        recipeResults.appendChild(recipeCard);
     });
+
+    // Show "Back to Search" button when results appear
+    backToSearchBtn.classList.remove('hidden');
 }
 
-// Dark Mode Toggle
-// Toggles dark mode for the application when the button is clicked
-darkModeToggle.addEventListener('click', () => {
-    document.body.classList.toggle('dark-mode'); // Add or remove the "dark-mode" class on the body
+// Scroll back to search input when button is clicked
+backToSearchBtn.addEventListener('click', () => {
+    window.scrollTo({
+        top: document.querySelector('.search-box').offsetTop - 20,
+        behavior: 'smooth'
+    });
 });
+
+// Dark Mode Toggle
+darkModeToggle.addEventListener('change', () => {
+    document.body.classList.toggle('dark-mode');
+    localStorage.setItem('darkMode', document.body.classList.contains('dark-mode'));
+});
+
+// Load dark mode preference from local storage
+if (localStorage.getItem('darkMode') === 'true') {
+    document.body.classList.add('dark-mode');
+    darkModeToggle.checked = true;
+}
